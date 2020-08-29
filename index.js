@@ -1,27 +1,70 @@
 var canvas = document.getElementById("myCanvas");
+var canvasRectangle = document.getElementById("canvasRectangle");
 var colorDots = 'rgba(10, 11, 83, .5)';
+var sliderX = document.getElementById("rangeX");
+var sliderY = document.getElementById("rangeY");
+var btnSimulate = document.getElementById("btnSimulate");
+var selectShape = document.getElementById("selectShapes");
+
 var valueCycle = 10000;
 var scale = 70;
+let sizeX = 10;
+let sizeY = 10;
+
+var timing = null;
 
 createMap();
 createRectangleBorder()
-// createShape1();
-createCircle();
-// processSimulate();
 
-function processSimulate() {
-    for (let i = 0; i < valueCycle; i++) {
-        createPoint();
+selectShape.onchange = function () {
+    clearTimeout(timing);
+    createRectangleBorder(sizeX * scale, sizeY * scale);
+    canvas.getContext("2d").clearRect(0, 0, 700, 700);
+    canvas.getContext("2d").beginPath();
+    switch (this.value) {
+        case '1':
+            createCircle();
+            break;
+        case '2':
+            createShape1();
+            break;
     }
 }
 
-function createRectangleBorder() {
-    var ctx = canvas.getContext("2d");
+btnSimulate.onclick = async function () {
+    if (selectShape.value != 0) processSimulate();
+    else alert('You must choose a shape.')
+};
+
+sliderX.oninput = function () {
+    clearTimeout(timing);
+    sizeX = this.value;
+    document.getElementById('rangeX-label').innerHTML = sizeX;
+    createRectangleBorder(sizeX * scale, sizeY * scale);
+};
+
+sliderY.oninput = function () {
+    clearTimeout(timing);
+    sizeY = this.value;
+    document.getElementById('rangeY-label').innerHTML = sizeY;
+    createRectangleBorder(sizeX * scale, sizeY * scale);
+};
+
+async function processSimulate() {
+    createRectangleBorder(sizeX * scale, sizeY * scale);
+    for (let i = 0; i < valueCycle; i++) {
+        createPoint();
+        await wait(0);
+    }
+}
+
+function createRectangleBorder(width = 700, height = 700) {
+    var ctx = canvasRectangle.getContext("2d");
+    ctx.clearRect(0, 0, 700, 700);
     ctx.strokeStyle = 'rgb(191, 23, 27)';
     ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.rect(0, 0, 700, 700);
-    ctx.stroke();
+    ctx.lineWidth = 5;
+    ctx.rect(0, 0, width, height);
     ctx.stroke();
 }
 
@@ -67,14 +110,14 @@ function createMap() {
 }
 
 function createCircle() {
-    var ctxDot2 = canvas.getContext("2d");
-    ctxDot2.fillStyle = "transparent";
-    ctxDot2.strokeStyle = 'rgb(191, 23, 27)';
-    ctxDot2.lineWidth = 1;
-    ctxDot2.beginPath();
-    ctxDot2.arc(scale * 5, scale * 5, scale * 5, 0, Math.PI * 2, true);
-    ctxDot2.fill();
-    ctxDot2.stroke();
+    var canvasCircle = canvas.getContext("2d");
+    canvasCircle.fillStyle = "transparent";
+    canvasCircle.strokeStyle = 'rgb(191, 23, 27)';
+    canvasCircle.lineWidth = 1;
+    canvasCircle.beginPath();
+    canvasCircle.arc(scale * 5, scale * 5, scale * 5, 0, Math.PI * 2, true);
+    canvasCircle.fill();
+    canvasCircle.stroke();
 
     var ctxDotCenter = canvas.getContext("2d");
     ctxDotCenter.fillStyle = "#434745";
@@ -108,31 +151,40 @@ function createShape1() {
     ctx3.lineTo(scale * 10, 0);
     ctx3.stroke();
 
-    // // Create first dot
-    // var ctxDot2 = canvas.getContext("2d");
-    // ctxDot2.fillStyle = "#0B6AB1";
-    // ctxDot2.strokeStyle = '#434745';
-    // ctxDot2.lineWidth = 2;
-    // ctxDot2.beginPath();
-    // ctxDot2.arc(scale * 8, scale * 4, 5, 0, Math.PI * 2, true);
-    // ctxDot2.fill();
-    // ctxDot2.stroke();
+    // Create first dot
+    var ctxDot2 = canvas.getContext("2d");
+    ctxDot2.fillStyle = "#0B6AB1";
+    ctxDot2.strokeStyle = '#434745';
+    ctxDot2.lineWidth = 2;
+    ctxDot2.beginPath();
+    ctxDot2.arc(scale * 8, scale * 4, 5, 0, Math.PI * 2, true);
+    ctxDot2.fill();
+    ctxDot2.stroke();
 
-    // // Create second dot
-    // var ctxDot1 = canvas.getContext("2d");
-    // ctxDot1.fillStyle = "#0B6AB1";
-    // ctxDot1.strokeStyle = '#434745';
-    // ctxDot1.lineWidth = 2;
-    // ctxDot1.beginPath();
-    // ctxDot1.arc(scale * 2, scale * 5, 5, 0, Math.PI * 2, true);
-    // ctxDot1.fill();
-    // ctxDot1.stroke();
+    // Create second dot
+    var ctxDot1 = canvas.getContext("2d");
+    ctxDot1.fillStyle = "#0B6AB1";
+    ctxDot1.strokeStyle = '#434745';
+    ctxDot1.lineWidth = 2;
+    ctxDot1.beginPath();
+    ctxDot1.arc(scale * 2, scale * 5, 5, 0, Math.PI * 2, true);
+    ctxDot1.fill();
+    ctxDot1.stroke();
 }
 
 function createPoint() {
-    var ctxDot = canvas.getContext("2d");
+    var ctxDot = canvasRectangle.getContext("2d");
     ctxDot.fillStyle = colorDots;
     ctxDot.beginPath();
-    ctxDot.arc(Math.random() * canvas.width, Math.random() * canvas.height, 2, 0, Math.PI * 2, true);
+    ctxDot.arc(Math.random() * (sizeX * scale), Math.random() * (sizeY * scale), 2, 0, Math.PI * 2, true);
     ctxDot.fill();
+}
+
+//Function promise for timeout
+function wait(time) {
+    return new Promise(resolve => {
+        timing = setTimeout(() => {
+            resolve();
+        }, time);
+    });
 }
