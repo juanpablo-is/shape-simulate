@@ -18,8 +18,9 @@ body {
 #container {
     margin: 0 auto;
     position: relative;
-    width: 1000px;
-    height: 500px;
+    width: 700px;
+    height: 700px;
+    transform: scale(.8);
 }
 
 #myCanvas {
@@ -29,12 +30,12 @@ body {
 
 #graph {
     z-index: -1;
-    top: -9px;
+    top: -24px;
     left: -24px;
     position: absolute;
     margin: 0 auto;
     overflow: hidden;
-    height: 525px;
+    /* height: 525px; */
 }
 
 .axis text {
