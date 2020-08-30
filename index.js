@@ -63,6 +63,8 @@ function processSimulate() {
     let areaExpected = 0;
     if (selectShape.value == 1)
         areaExpected = Math.PI * Math.pow(350, 2);
+    else if (selectShape.value == 2)
+        areaExpected = 24500 + 14700 + 117600 + 19600;
     document.getElementById('info-expected').innerHTML = areaExpected.toFixed(2);
     document.getElementById('info-total').innerHTML = valueCycle;
 
