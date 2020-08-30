@@ -3,10 +3,12 @@ var canvasRectangle = document.getElementById("canvasRectangle");
 var colorDots = 'rgba(10, 11, 83, .5)';
 var sliderX = document.getElementById("rangeX");
 var sliderY = document.getElementById("rangeY");
+var sliderCycle = document.getElementById("rangecycle");
 var btnSimulate = document.getElementById("btnSimulate");
 var selectShape = document.getElementById("selectShapes");
 
-var valueCycle = 10000;
+var valueCycle = 5000;
+var areaRectangle = 700 * 700;
 var scale = 70;
 let sizeX = 10;
 let sizeY = 10;
@@ -30,83 +32,54 @@ selectShape.onchange = function () {
             break;
     }
 }
-
-btnSimulate.onclick = async function () {
+btnSimulate.onclick = function () {
+    clearTimeout(timing);
     if (selectShape.value != 0) processSimulate();
     else alert('You must choose a shape.')
 };
-
 sliderX.oninput = function () {
     clearTimeout(timing);
     sizeX = this.value;
     document.getElementById('rangeX-label').innerHTML = sizeX;
     createRectangleBorder(sizeX * scale, sizeY * scale);
 };
-
 sliderY.oninput = function () {
     clearTimeout(timing);
     sizeY = this.value;
     document.getElementById('rangeY-label').innerHTML = sizeY;
     createRectangleBorder(sizeX * scale, sizeY * scale);
 };
+sliderCycle.oninput = function () {
+    clearTimeout(timing);
+    valueCycle = this.value;
+    document.getElementById('rangecycle-label').innerHTML = valueCycle;
+    document.getElementById('info-total').innerHTML = valueCycle;
+};
 
-async function processSimulate() {
+function processSimulate() {
     createRectangleBorder(sizeX * scale, sizeY * scale);
+    areaRectangle = sizeX * sizeY * scale * scale;
+
+    let areaExpected = 0;
+    if (selectShape.value == 1)
+        areaExpected = Math.PI * Math.pow(350, 2);
+    document.getElementById('info-expected').innerHTML = areaExpected.toFixed(2);
+    document.getElementById('info-total').innerHTML = valueCycle;
+
+    let dentro = 0;
     for (let i = 0; i < valueCycle; i++) {
-        createPoint();
-        await wait(0);
+        setTimeout(function () {
+            let x = Math.random() * (sizeX * scale), y = Math.random() * (sizeY * scale);
+            if (selectShape.value == 1) {
+                if (Math.pow(x - 350, 2) + Math.pow(y - 350, 2) <= Math.pow(350, 2))
+                    dentro++;
+                document.getElementById('info-result').innerHTML = (areaRectangle * (dentro / valueCycle)).toFixed(2);
+                document.getElementById('info-inside').innerHTML = dentro;
+            }
+
+            createPoint(x, y);
+        }, 0);
     }
-}
-
-function createRectangleBorder(width = 700, height = 700) {
-    var ctx = canvasRectangle.getContext("2d");
-    ctx.clearRect(0, 0, 700, 700);
-    ctx.strokeStyle = 'rgb(191, 23, 27)';
-    ctx.beginPath();
-    ctx.lineWidth = 5;
-    ctx.rect(0, 0, width, height);
-    ctx.stroke();
-}
-
-function createMap() {
-    // Set graph
-    var width = 725, height = 725;
-
-    // create an svg container
-    var vis = d3.select("#graph")
-        .append("svg:svg")
-        .attr("width", width + 25)
-        .attr("height", height + 25);
-
-    var xScale = d3.scale.linear().domain([10, 0]).range([width, 25]);
-    var yScale = d3.scale.linear().domain([0, 10]).range([width, 25]);
-
-    // define the y axis
-    var yAxis = d3.svg.axis()
-        .orient("left")
-        .scale(yScale);
-
-    // define the y axis
-    var xAxis = d3.svg.axis()
-        .orient("bottom")
-        .scale(xScale);
-
-    var xAxisPlot = vis.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + (height) + ")")
-        .call(xAxis.tickSize(0, 0, 0));
-
-    var yAxisPlot = vis.append("g")
-        .attr("class", "axis axis--y")
-        .attr("transform", "translate(" + (25) + ",0)")
-        .call(yAxis.tickSize(0, 0, 0));
-
-
-    xAxisPlot.selectAll(".tick line")
-        .attr("y1", -700);
-
-    yAxisPlot.selectAll(".tick line")
-        .attr("x2", 700);
 }
 
 function createCircle() {
@@ -172,19 +145,61 @@ function createShape1() {
     ctxDot1.stroke();
 }
 
-function createPoint() {
+function createMap() {
+    // Set graph
+    var width = 725, height = 725;
+
+    // create an svg container
+    var vis = d3.select("#graph")
+        .append("svg:svg")
+        .attr("width", width + 25)
+        .attr("height", height + 25);
+
+    var xScale = d3.scale.linear().domain([10, 0]).range([width, 25]);
+    var yScale = d3.scale.linear().domain([0, 10]).range([width, 25]);
+
+    // define the y axis
+    var yAxis = d3.svg.axis()
+        .orient("left")
+        .scale(yScale);
+
+    // define the y axis
+    var xAxis = d3.svg.axis()
+        .orient("bottom")
+        .scale(xScale);
+
+    var xAxisPlot = vis.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + (height) + ")")
+        .call(xAxis.tickSize(0, 0, 0));
+
+    var yAxisPlot = vis.append("g")
+        .attr("class", "axis axis--y")
+        .attr("transform", "translate(" + (25) + ",0)")
+        .call(yAxis.tickSize(0, 0, 0));
+
+
+    xAxisPlot.selectAll(".tick line")
+        .attr("y1", -700);
+
+    yAxisPlot.selectAll(".tick line")
+        .attr("x2", 700);
+}
+
+function createRectangleBorder(width = 700, height = 700) {
+    var ctx = canvasRectangle.getContext("2d");
+    ctx.clearRect(0, 0, 700, 700);
+    ctx.strokeStyle = 'rgb(191, 23, 27)';
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.rect(0, 0, width, height);
+    ctx.stroke();
+}
+
+function createPoint(x, y) {
     var ctxDot = canvasRectangle.getContext("2d");
     ctxDot.fillStyle = colorDots;
     ctxDot.beginPath();
-    ctxDot.arc(Math.random() * (sizeX * scale), Math.random() * (sizeY * scale), 2, 0, Math.PI * 2, true);
+    ctxDot.arc(x, y, 2, 0, Math.PI * 2, true);
     ctxDot.fill();
-}
-
-//Function promise for timeout
-function wait(time) {
-    return new Promise(resolve => {
-        timing = setTimeout(() => {
-            resolve();
-        }, time);
-    });
 }
