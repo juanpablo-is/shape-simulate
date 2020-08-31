@@ -1,4 +1,5 @@
 var scale = 70;
+var colorDots = 'rgba(10, 11, 83, .5)';
 
 function createPoint(point) {
     var ctxDot = canvasRectangle.getContext("2d");
@@ -38,6 +39,7 @@ function createShape() {
         //Create a line.
         var ctx2 = canvas.getContext("2d");
         ctx2.moveTo(scale * verticesArr[i]['x'], scale * verticesArr[i]['y']);
+        ctx2.lineWidth = 3;
         ctx2.lineTo(scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['x'], scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['y']);
         ctx2.stroke();
 
@@ -45,7 +47,7 @@ function createShape() {
         var ctxDot2 = canvas.getContext("2d");
         ctxDot2.fillStyle = "#0B6AB1";
         ctxDot2.strokeStyle = '#434745';
-        ctxDot2.lineWidth = 2;
+        ctxDot2.lineWidth = 3;
         // Dot start.
         ctxDot2.beginPath();
         ctxDot2.arc(scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['x'], scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['y'], 5, 0, Math.PI * 2, true);

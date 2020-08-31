@@ -218,7 +218,6 @@ input[type=button]:hover {
 }
 
 .tick line {
-    stroke: #59ADEB;
     stroke: gray;
     opacity: 0.5;
 }

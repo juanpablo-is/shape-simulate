@@ -1,6 +1,5 @@
 var canvas = document.getElementById("myCanvas");
 var canvasRectangle = document.getElementById("canvasRectangle");
-var colorDots = 'rgba(10, 11, 83, .5)';
 var sliderXL = document.getElementById("rangeXL");
 var sliderXR = document.getElementById("rangeXR");
 var sliderYL = document.getElementById("rangeYL");
