@@ -103,20 +103,34 @@ hr {
     margin: 30px;
 }
 
-input[type=button] {
-    background-color: #429FF5;
+input[type='button'] {
     border-radius: 5px;
     font-weight: bold;
     letter-spacing: 2px;
     padding: 10px 20px;
     outline: none;
-    color: white;
     cursor: pointer;
     flex: 1;
     margin: 0 20px;
 }
 
-input[type=button]:hover {
+#btnSimulate {
+    background-color: #429FF5;
+    color: white;
+}
+
+#btnSimulate:hover {
+    background-color: transparent;
+    border-color: #429FF5;
+    color: #429FF5;
+}
+
+#btnCreate {
+    color: #429FF5;
+    background-color: white;
+}
+
+#btnCreate:hover {
     background-color: transparent;
     border-color: #429FF5;
     color: #429FF5;
@@ -128,6 +142,10 @@ input[type=button]:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+#btns {
+    display: flex;
 }
 
 #pnl-info {
