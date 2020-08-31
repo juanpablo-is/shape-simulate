@@ -11,7 +11,6 @@ var selectShape = document.getElementById("selectShapes");
 
 var valueCycle = 5000;
 var areaRectangle = 700 * 700;
-var scale = 70;
 let sizeXL = 0;
 let sizeXR = 10;
 let sizeYL = 0;
@@ -64,43 +63,41 @@ sliderCycle.oninput = function () {
 
 function slider() {
     clearTimeout(timing);
-    sizeXL = document.getElementById('rangeXL').value;
-    sizeXR = document.getElementById('rangeXR').value;
-    sizeYL = document.getElementById('rangeYL').value;
-    sizeYR = document.getElementById('rangeYR').value;
+    sizeXL = Number(document.getElementById('rangeXL').value);
+    sizeXR = Number(document.getElementById('rangeXR').value);
+    sizeYL = Number(document.getElementById('rangeYL').value);
+    sizeYR = Number(document.getElementById('rangeYR').value);
 
-    // document.getElementById('rangeX-label').innerHTML = sizeX;
-    createRectangleBorder(sizeXL * scale, sizeXR * scale, sizeYL * scale, sizeYR * scale);
-    return (sizeXR - sizeXL) * scale * (sizeYR - sizeYL) * scale;
+    createRectangleBorder(sizeXL, sizeXR, sizeYL, sizeYR);
 }
 
 function processSimulate() {
-    areaRectangle = slider();
-
+    createRectangleBorder(sizeXL, sizeXR, sizeYL, sizeYR);
     let areaExpected = 0;
     if (selectShape.value == 1)
-        areaExpected = Math.PI * Math.pow(350, 2);
+        areaExpected = Math.PI * Math.pow(5, 2);
     else if (selectShape.value == 2)
-        areaExpected = calculateArea(); // 176400;
+        areaExpected = calculateArea();
     document.getElementById('info-expected').innerHTML = areaExpected.toFixed(2);
     document.getElementById('info-total').innerHTML = valueCycle;
 
     let dentro = 0;
     for (let i = 0; i < valueCycle; i++) {
         setTimeout(function () {
-            let x = Math.random() * (sizeXR * scale - sizeXL * scale) + (sizeXL * scale),
-                y = Math.random() * (sizeYR * scale - sizeYL * scale) + (sizeYL * scale);
+            let x = Math.random() * (sizeXR - sizeXL) + sizeXL,
+            y = Math.random() * (sizeYR - sizeYL) + sizeYL;
             let point = { 'x': x, 'y': y };
             createPoint(point);
 
             if (selectShape.value == 1) {
-                if (Math.pow(x - 350, 2) + Math.pow(y - 350, 2) <= Math.pow(350, 2))
+                if (Math.pow(x - 5, 2) + Math.pow(y - 5, 2) <= Math.pow(5, 2))
                     dentro++;
             }
             else if (selectShape.value == 2) {
                 if (pointInside(point))
                     dentro++;
             }
+            areaRectangle = (sizeXR - sizeXL) * (sizeYR - sizeYL);
             document.getElementById('info-result').innerHTML = (areaRectangle * (dentro / valueCycle)).toFixed(2);
             document.getElementById('info-inside').innerHTML = dentro;
 
@@ -116,8 +113,8 @@ function calculateArea() {
     let valueLeft = 0, valueRight = 0;
 
     for (let i = 0; i < count; i++) {
-        valueLeft += vertices[i]['y'] * vertices[i + 1]['x'] * scale * scale;
-        valueRight += vertices[i]['x'] * vertices[i + 1]['y'] * scale * scale;
+        valueLeft += vertices[i]['y'] * vertices[i + 1]['x'];
+        valueRight += vertices[i]['x'] * vertices[i + 1]['y'];
     }
 
     let result = Math.abs((valueLeft - valueRight) / 2);
@@ -125,8 +122,8 @@ function calculateArea() {
 }
 
 function pointInside(point) {
-    point.x = point.x / 70;
-    point.y = point.y / 70;
+    point.x = point.x;
+    point.y = point.y;
 
     let intersections = 0;
     for (let i = 1; i < verticesArr.length; i++) {

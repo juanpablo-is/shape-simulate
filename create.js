@@ -1,10 +1,10 @@
-
+var scale = 70;
 
 function createPoint(point) {
     var ctxDot = canvasRectangle.getContext("2d");
     ctxDot.fillStyle = colorDots;
     ctxDot.beginPath();
-    ctxDot.arc(point.x, point.y, 2, 0, Math.PI * 2, true);
+    ctxDot.arc(point.x * scale, point.y * scale, 2, 0, Math.PI * 2, true);
     ctxDot.fill();
 }
 
@@ -100,13 +100,13 @@ function createMap() {
         .attr("x2", 700);
 }
 
-function createRectangleBorder(xL = 0, xR = 700, yL = 0, yR = 700) {
+function createRectangleBorder(xL = 0, xR = 10, yL = 0, yR = 10) {
     var ctx = canvasRectangle.getContext("2d");
     ctx.clearRect(0, 0, 700, 700);
     ctx.strokeStyle = 'rgb(191, 23, 27)';
     ctx.beginPath();
     ctx.lineWidth = 5;
-    ctx.rect(xL, yL, xR - xL, yR - yL);
+    ctx.rect((xL * scale), (yL * scale), (xR - xL) * scale, (yR - yL) * scale);
     // ctx.rect(70, 70, 140, 140);
     ctx.stroke();
 }
