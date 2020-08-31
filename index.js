@@ -15,17 +15,13 @@ let sizeY = 10;
 
 var timing = null;
 
-let verticesShape1 = [
-    { 'x': 0, 'y': 0 },
-    { 'x': 2, 'y': 5 },
-    { 'x': 8, 'y': 4 },
-    { 'x': 10, 'y': 0 },
-];
+let verticesArr = [];
 
 createMap();
 createRectangleBorder();
 
 selectShape.onchange = function () {
+    verticesArr = selectShape.options[selectShape.selectedIndex].dataset.vertices != undefined ? convertArray(JSON.parse(selectShape.options[selectShape.selectedIndex].dataset.vertices)) : [];
     clearTimeout(timing);
     createRectangleBorder(sizeX * scale, sizeY * scale);
     canvas.getContext("2d").clearRect(0, 0, 700, 700);
@@ -35,7 +31,7 @@ selectShape.onchange = function () {
             createCircle();
             break;
         case '2':
-            createShape1();
+            createShape();
             break;
     }
 }
@@ -98,7 +94,7 @@ function processSimulate() {
 }
 
 function calculateArea() {
-    let vertices = JSON.parse(JSON.stringify(verticesShape1));
+    let vertices = JSON.parse(JSON.stringify(verticesArr));
     vertices.push(vertices[0]);
 
     let count = vertices.length - 1;
@@ -118,9 +114,9 @@ function pointInside(point) {
     point.y = point.y / 70;
 
     let intersections = 0;
-    for (let i = 1; i < verticesShape1.length; i++) {
-        let vertex1 = verticesShape1[i - 1];
-        let vertex2 = verticesShape1[i];
+    for (let i = 1; i < verticesArr.length; i++) {
+        let vertex1 = verticesArr[i - 1];
+        let vertex2 = verticesArr[i];
         if (vertex1['y'] == vertex2['y'] && vertex1['y'] == point['y'] && point['x'] > Math.min(vertex1['x'], vertex2['x']) && point['x'] < Math.max(vertex1['x'], vertex2['x']))
             return true; //boundary
         if (point['y'] > Math.min(vertex1['y'], vertex2['y']) && point['y'] <= Math.max(vertex1['y'], vertex2['y']) && point['x'] <= Math.max(vertex1['x'], vertex2['x']) && vertex1['y'] != vertex2['y']) {
@@ -136,4 +132,12 @@ function pointInside(point) {
     } else {
         return false; //outside
     }
+}
+
+function convertArray(array) {
+    let arrayConvert = []
+    for (let i = 0; i < array.length; i++) {
+        arrayConvert.push({ 'x': array[i][0], 'y': array[i][1] });
+    }
+    return arrayConvert;
 }

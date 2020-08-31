@@ -28,17 +28,17 @@ function createCircle() {
     ctxDotCenter.stroke();
 }
 
-function createShape1() {
+function createShape() {
     // Create first line
     var ctx = canvas.getContext("2d");
     ctx.strokeStyle = '#434745';
     ctx.lineWidth = 2;
 
-    for (let i = 0; i < verticesShape1.length; i++) {
+    for (let i = 0; i < verticesArr.length; i++) {
         //Create a line.
         var ctx2 = canvas.getContext("2d");
-        ctx2.moveTo(scale * verticesShape1[i]['x'], scale * verticesShape1[i]['y']);
-        ctx2.lineTo(scale * verticesShape1[i == verticesShape1.length - 1 ? 0 : i + 1]['x'], scale * verticesShape1[i == verticesShape1.length - 1 ? 0 : i + 1]['y']);
+        ctx2.moveTo(scale * verticesArr[i]['x'], scale * verticesArr[i]['y']);
+        ctx2.lineTo(scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['x'], scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['y']);
         ctx2.stroke();
 
         //Create a dot.
@@ -48,12 +48,12 @@ function createShape1() {
         ctxDot2.lineWidth = 2;
         // Dot start.
         ctxDot2.beginPath();
-        ctxDot2.arc(scale * verticesShape1[i == verticesShape1.length - 1 ? 0 : i + 1]['x'], scale * verticesShape1[i == verticesShape1.length - 1 ? 0 : i + 1]['y'], 5, 0, Math.PI * 2, true);
+        ctxDot2.arc(scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['x'], scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['y'], 5, 0, Math.PI * 2, true);
         ctxDot2.fill();
         ctxDot2.stroke();
         //Dot end.
         ctxDot2.beginPath();
-        ctxDot2.arc(scale * verticesShape1[i == verticesShape1.length - 1 ? 0 : i + 1]['x'], scale * verticesShape1[i == verticesShape1.length - 1 ? 0 : i + 1]['y'], 5, 0, Math.PI * 2, true);
+        ctxDot2.arc(scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['x'], scale * verticesArr[i == verticesArr.length - 1 ? 0 : i + 1]['y'], 5, 0, Math.PI * 2, true);
         ctxDot2.fill();
         ctxDot2.stroke();
     }
