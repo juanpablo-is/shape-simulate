@@ -100,12 +100,13 @@ function createMap() {
         .attr("x2", 700);
 }
 
-function createRectangleBorder(width = 700, height = 700) {
+function createRectangleBorder(xL = 0, xR = 700, yL = 0, yR = 700) {
     var ctx = canvasRectangle.getContext("2d");
     ctx.clearRect(0, 0, 700, 700);
     ctx.strokeStyle = 'rgb(191, 23, 27)';
     ctx.beginPath();
     ctx.lineWidth = 5;
-    ctx.rect(0, 0, width, height);
+    ctx.rect(xL, yL, xR - xL, yR - yL);
+    // ctx.rect(70, 70, 140, 140);
     ctx.stroke();
 }

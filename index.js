@@ -1,8 +1,10 @@
 var canvas = document.getElementById("myCanvas");
 var canvasRectangle = document.getElementById("canvasRectangle");
 var colorDots = 'rgba(10, 11, 83, .5)';
-var sliderX = document.getElementById("rangeX");
-var sliderY = document.getElementById("rangeY");
+var sliderXL = document.getElementById("rangeXL");
+var sliderXR = document.getElementById("rangeXR");
+var sliderYL = document.getElementById("rangeYL");
+var sliderYR = document.getElementById("rangeYR");
 var sliderCycle = document.getElementById("rangecycle");
 var btnSimulate = document.getElementById("btnSimulate");
 var selectShape = document.getElementById("selectShapes");
@@ -10,8 +12,10 @@ var selectShape = document.getElementById("selectShapes");
 var valueCycle = 5000;
 var areaRectangle = 700 * 700;
 var scale = 70;
-let sizeX = 10;
-let sizeY = 10;
+let sizeXL = 0;
+let sizeXR = 10;
+let sizeYL = 0;
+let sizeYR = 10;
 
 var timing = null;
 
@@ -22,8 +26,7 @@ createRectangleBorder();
 
 selectShape.onchange = function () {
     verticesArr = selectShape.options[selectShape.selectedIndex].dataset.vertices != undefined ? convertArray(JSON.parse(selectShape.options[selectShape.selectedIndex].dataset.vertices)) : [];
-    clearTimeout(timing);
-    createRectangleBorder(sizeX * scale, sizeY * scale);
+    slider()
     canvas.getContext("2d").clearRect(0, 0, 700, 700);
     canvas.getContext("2d").beginPath();
     switch (this.value) {
@@ -40,17 +43,17 @@ btnSimulate.onclick = function () {
     if (selectShape.value != 0) processSimulate();
     else alert('You must choose a shape.')
 };
-sliderX.oninput = function () {
-    clearTimeout(timing);
-    sizeX = this.value;
-    document.getElementById('rangeX-label').innerHTML = sizeX;
-    createRectangleBorder(sizeX * scale, sizeY * scale);
+sliderXL.oninput = function () {
+    slider()
 };
-sliderY.oninput = function () {
-    clearTimeout(timing);
-    sizeY = this.value;
-    document.getElementById('rangeY-label').innerHTML = sizeY;
-    createRectangleBorder(sizeX * scale, sizeY * scale);
+sliderXR.oninput = function () {
+    slider()
+};
+sliderYL.oninput = function () {
+    slider()
+};
+sliderYR.oninput = function () {
+    slider()
 };
 sliderCycle.oninput = function () {
     clearTimeout(timing);
@@ -59,9 +62,20 @@ sliderCycle.oninput = function () {
     document.getElementById('info-total').innerHTML = valueCycle;
 };
 
+function slider() {
+    clearTimeout(timing);
+    sizeXL = document.getElementById('rangeXL').value;
+    sizeXR = document.getElementById('rangeXR').value;
+    sizeYL = document.getElementById('rangeYL').value;
+    sizeYR = document.getElementById('rangeYR').value;
+
+    // document.getElementById('rangeX-label').innerHTML = sizeX;
+    createRectangleBorder(sizeXL * scale, sizeXR * scale, sizeYL * scale, sizeYR * scale);
+    return (sizeXR - sizeXL) * scale * (sizeYR - sizeYL) * scale;
+}
+
 function processSimulate() {
-    createRectangleBorder(sizeX * scale, sizeY * scale);
-    areaRectangle = sizeX * sizeY * scale * scale;
+    areaRectangle = slider();
 
     let areaExpected = 0;
     if (selectShape.value == 1)
@@ -74,7 +88,8 @@ function processSimulate() {
     let dentro = 0;
     for (let i = 0; i < valueCycle; i++) {
         setTimeout(function () {
-            let x = Math.random() * (sizeX * scale), y = Math.random() * (sizeY * scale);
+            let x = Math.random() * (sizeXR * scale - sizeXL * scale) + (sizeXL * scale),
+                y = Math.random() * (sizeYR * scale - sizeYL * scale) + (sizeYL * scale);
             let point = { 'x': x, 'y': y };
             createPoint(point);
 

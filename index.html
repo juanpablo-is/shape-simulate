@@ -15,14 +15,14 @@
                 <div id="input-range">
                     <div id="range-x">
                         <label for="">X</label>
-                        <input type="range" min="1" max="10" value="10" step="1" class="slider" name="rangeX"
-                            id="rangeX">
-                        <output for="rangeX" onforminput="value = rangeX.valueAsNumber;"></output>
+                        <input type="range" min="0" max="5" value="0" step="1" class="slider" id="rangeXL">
+                        <input type="range" min="5" max="10" value="10" step="1" class="slider" id="rangeXR">
                         <label for="rangeX" id="rangeX-label">10</label>
                     </div>
                     <div id="range-y">
                         <label for="">Y</label>
-                        <input type="range" min="1" max="10" value="10" step="1" class="slider" id="rangeY">
+                        <input type="range" min="0" max="5" value="0" step="1" class="slider" id="rangeYL">
+                        <input type="range" min="5" max="10" value="10" step="1" class="slider" id="rangeYR">
                         <label for="rangeY" id="rangeY-label">10</label>
                     </div>
                     <div id="range-cycle">
@@ -40,7 +40,7 @@
                         <option value="2" data-vertices="[[1,5],[5,9],[9,5],[5,1]]">Shape 2</option>
                         <option value="2" data-vertices="[[2,2],[5,8],[8,2]]">Shape 3</option>
                         <option value="2" data-vertices="[[2,5],[5,8],[8,5],[7,2],[3,2]]">Shape 4</option>
-                        <option value="2" data-vertices="[[1,5],[5,9],[9,5],[5,1]]">Shape 5</option>
+                        <option value="2" data-vertices="[[1,7],[3,9],[7,9],[9,7],[9,3],[7,1],[3,1],[1,3]]">Shape 5</option>
                     </select>
                     <input type="button" value="SIMULATE" id="btnSimulate">
                 </div>
