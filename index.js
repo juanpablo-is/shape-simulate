@@ -38,7 +38,7 @@ selectShape.onchange = function () {
 }
 btnSimulate.onclick = function () {
     clearTimeout(timing);
-    if (selectShape.value != 0) processSimulate();
+    if (!(selectShape.value == 0 && document.getElementById('list-dots').length == 0)) processSimulate();
     else alert('You must choose a shape.')
 };
 sliderXL.oninput = function () {
@@ -73,9 +73,9 @@ function slider() {
 function processSimulate() {
     createRectangleBorder(sizeXL, sizeXR, sizeYL, sizeYR);
     let areaExpected = 0;
-    if (selectShape.value == 1)
+    if (selectShape.value == 'circle')
         areaExpected = Math.PI * Math.pow(5, 2);
-    else if (selectShape.value == 2)
+    else
         areaExpected = calculateArea();
     document.getElementById('info-expected').innerHTML = areaExpected.toFixed(2);
     document.getElementById('info-total').innerHTML = valueCycle;
@@ -84,15 +84,15 @@ function processSimulate() {
     for (let i = 0; i < valueCycle; i++) {
         setTimeout(function () {
             let x = Math.random() * (sizeXR - sizeXL) + sizeXL,
-            y = Math.random() * (sizeYR - sizeYL) + sizeYL;
+                y = Math.random() * (sizeYR - sizeYL) + sizeYL;
             let point = { 'x': x, 'y': y };
             createPoint(point);
 
-            if (selectShape.value == 1) {
+            if (selectShape.value == 'circle') {
                 if (Math.pow(x - 5, 2) + Math.pow(y - 5, 2) <= Math.pow(5, 2))
                     dentro++;
             }
-            else if (selectShape.value == 2) {
+            else {
                 if (pointInside(point))
                     dentro++;
             }
@@ -145,10 +145,58 @@ function pointInside(point) {
     }
 }
 
+function createDot() {
+    let li = document.createElement('li');
+    let div = document.createElement('div');
+
+    let input1 = document.createElement('input')
+    input1.type = 'number';
+    input1.setAttribute('value', 0);
+    input1.min = '0';
+    input1.max = '10';
+    input1.classList.add('dot-create');
+    input1.onchange = () => {
+        createShapeButton();
+    }
+
+    let input2 = document.createElement('input')
+    input2.type = 'number';
+    input2.setAttribute('value', 0);
+    input2.min = '0';
+    input2.max = '10';
+    input2.classList.add('dot-create');
+    input2.onchange = () => {
+        createShapeButton();
+    }
+
+    div.appendChild(input1);
+    div.appendChild(input2);
+    li.appendChild(div);
+    document.getElementById('list-dots').appendChild(li);
+}
+
 function convertArray(array) {
     let arrayConvert = []
     for (let i = 0; i < array.length; i++) {
         arrayConvert.push({ 'x': array[i][0], 'y': array[i][1] });
     }
     return arrayConvert;
+}
+
+// Add dot.
+document.querySelector('#add-dot h3').addEventListener('click', () => {
+    createDot();
+    createShapeButton();
+});
+// Event close popup.
+document.querySelector('#popup-modal h4').addEventListener('click', () => {
+    popup('none');
+});
+//Event open popup
+document.querySelector('#btnCreate').addEventListener('click', () => {
+    popup("flex");
+});
+// Function event popup.
+function popup(opcion) {
+    document.getElementById('popup').style.display = opcion;
 }

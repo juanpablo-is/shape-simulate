@@ -9,6 +9,41 @@ function createPoint(point) {
     ctxDot.fill();
 }
 
+function createShapeButton() {
+    canvas.getContext("2d").clearRect(0, 0, 700, 700);
+    canvas.getContext("2d").beginPath();
+    let dotsCreate = document.getElementsByClassName('dot-create');
+    let dots = [];
+    for (let i = 0; i < dotsCreate.length; i++)
+        dots.push(dotsCreate[i].value);
+
+    dots.push(dots[0]);
+    dots.push(dots[1]);
+    verticesArr = [];
+
+    for (let i = 0; i < dots.length - 2; i += 2) {
+        let dotStart = Number(dots[i]), dotEnd = Number(dots[i + 1]);
+        verticesArr.push([dotStart, dotEnd]);
+        var ctx2 = canvas.getContext("2d");
+        ctx2.moveTo(scale * dotStart, scale * dotEnd);
+        ctx2.lineWidth = 3;
+        ctx2.lineTo(scale * dots[i + 2], scale * dots[i + 3]);
+        ctx2.stroke();
+
+        //Create a dot.
+        var ctxDot2 = canvas.getContext("2d");
+        ctxDot2.fillStyle = "#0B6AB1";
+        ctxDot2.strokeStyle = '#434745';
+        ctxDot2.lineWidth = 3;
+        // Dot start.
+        ctxDot2.beginPath();
+        ctxDot2.arc(dots.length - 2 == i ? scale * dotStart : scale * dots[i + 2], dots.length - 2 == i ? scale * dotEnd : scale * dots[i + 3], 5, 0, Math.PI * 2, true);
+        ctxDot2.fill();
+        ctxDot2.stroke();
+    }
+    verticesArr = convertArray(verticesArr);
+}
+
 function createCircle() {
     var canvasCircle = canvas.getContext("2d");
     canvasCircle.fillStyle = "transparent";
