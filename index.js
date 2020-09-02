@@ -28,7 +28,7 @@ selectShape.onchange = function () {
     canvas.getContext("2d").clearRect(0, 0, 700, 700);
     canvas.getContext("2d").beginPath();
     switch (this.value) {
-        case '1':
+        case 'circle':
             createCircle();
             break;
         case '2':
@@ -38,7 +38,7 @@ selectShape.onchange = function () {
 }
 btnSimulate.onclick = function () {
     clearTimeout(timing);
-    if (!(selectShape.value == 0 && document.getElementById('list-dots').length == 0)) processSimulate();
+    if (!(selectShape.value == 0 && document.getElementsByClassName('dot-create').length == 0)) processSimulate();
     else alert('You must choose a shape.')
 };
 sliderXL.oninput = function () {
@@ -77,7 +77,7 @@ function processSimulate() {
         areaExpected = Math.PI * Math.pow(5, 2);
     else
         areaExpected = calculateArea();
-    document.getElementById('info-expected').innerHTML = areaExpected.toFixed(2);
+    document.getElementById('info-expected').innerHTML = areaExpected.toFixed(4);
     document.getElementById('info-total').innerHTML = valueCycle;
 
     let dentro = 0;
@@ -97,7 +97,7 @@ function processSimulate() {
                     dentro++;
             }
             areaRectangle = (sizeXR - sizeXL) * (sizeYR - sizeYL);
-            document.getElementById('info-result').innerHTML = (areaRectangle * (dentro / valueCycle)).toFixed(2);
+            document.getElementById('info-result').innerHTML = (areaRectangle * (dentro / valueCycle)).toFixed(4);
             document.getElementById('info-inside').innerHTML = dentro;
 
         }, 0);
