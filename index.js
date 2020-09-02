@@ -148,6 +148,13 @@ function pointInside(point) {
 function createDot() {
     let li = document.createElement('li');
     let div = document.createElement('div');
+    div.classList.add('dot');
+    let img = document.createElement('img');
+    img.src = 'https://img.icons8.com/fluent-systems-regular/120/minus.png';
+    img.onclick = (e) => {
+        e.target.parentNode.remove();
+        createShapeButton();
+    }
 
     let input1 = document.createElement('input')
     input1.type = 'number';
@@ -172,6 +179,7 @@ function createDot() {
     div.appendChild(input1);
     div.appendChild(input2);
     li.appendChild(div);
+    li.appendChild(img);
     document.getElementById('list-dots').appendChild(li);
 }
 
