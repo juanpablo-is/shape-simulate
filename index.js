@@ -203,6 +203,9 @@ document.querySelector('#popup-modal h4').addEventListener('click', () => {
 //Event open popup
 document.querySelector('#btnCreate').addEventListener('click', () => {
     popup("flex");
+    canvas.getContext("2d").clearRect(0, 0, 700, 700);
+    canvas.getContext("2d").beginPath();
+    document.getElementById('selectShapes').options.selectedIndex = 0
 });
 // Function event popup.
 function popup(opcion) {
